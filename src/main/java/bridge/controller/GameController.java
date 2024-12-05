@@ -1,6 +1,8 @@
 package bridge.controller;
 
 import bridge.domain.BridgeGame;
+import bridge.exception.CustomException;
+import bridge.exception.ErrorMessage;
 import bridge.view.InputView;
 import bridge.view.OutputView;
 import java.util.function.Supplier;
@@ -34,7 +36,7 @@ public class GameController {
     }
 
     private String proceedWhenFailed(BridgeGame bridgeGame) {
-        String gameCommand = inputView.readGameCommand(); // 다시 시도할지 입력받기
+        String gameCommand = retry(() -> getValidGameCommand());// 다시 시도할지 입력받기
         if (gameCommand.equals("R")) {
             bridgeGame.reset(); // 게임 리셋 (플레이어 다시 -1로 제자리)
         }
@@ -42,6 +44,14 @@ public class GameController {
             outputView.printResult(bridgeGame, false); // 출력하고 그만
         }
         return gameCommand;
+    }
+
+    private String getValidGameCommand() {
+        String input = inputView.readGameCommand();
+        if (!input.equals("R") && !input.equals("Q")) {
+            throw CustomException.from(ErrorMessage.GAME_COMMAND_EXCEPTION);
+        }
+        return input;
     }
 
     private boolean crossAllTheBridges(BridgeGame bridgeGame) {
