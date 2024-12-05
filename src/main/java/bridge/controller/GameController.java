@@ -17,28 +17,37 @@ public class GameController {
     public void run() {
         inputView.announceStartOfGame();
         BridgeGame bridgeGame = retry(() -> BridgeGame.from(inputView.readBridgeSize()));
+        start(bridgeGame);
+    }
+
+    private void start(BridgeGame bridgeGame) {
         while (true) {
-            bridgeGame.increaseTryNumber();
-            boolean moved = false;
-            if (crossAllTheBridges(bridgeGame, moved)) { // 다리건너기 성공하면 출력하고 그만!
+            if (crossAllTheBridges(bridgeGame)) { // 다리건너기 성공하면 출력하고 그만!
                 outputView.printResult(bridgeGame, true);
                 break;
             }
-            String gameCommand = inputView.readGameCommand(); // 다시 시도할지 입력받기
-            if (gameCommand.equals("R")) {
-                 bridgeGame.reset(); // 게임 리셋 (플레이어 다시 -1로 제자리)
-                continue;
-            }
-            if (gameCommand.equals("Q")) {
-                outputView.printResult(bridgeGame, moved); // 출력하고 그만
+            String command = proceedWhenFailed(bridgeGame);
+            if (command.equals("Q")) {
                 break;
             }
         }
     }
 
-    private boolean crossAllTheBridges(BridgeGame bridgeGame, boolean moved) {
+    private String proceedWhenFailed(BridgeGame bridgeGame) {
+        String gameCommand = inputView.readGameCommand(); // 다시 시도할지 입력받기
+        if (gameCommand.equals("R")) {
+            bridgeGame.reset(); // 게임 리셋 (플레이어 다시 -1로 제자리)
+        }
+        if (gameCommand.equals("Q")) {
+            outputView.printResult(bridgeGame, false); // 출력하고 그만
+        }
+        return gameCommand;
+    }
+
+    private boolean crossAllTheBridges(BridgeGame bridgeGame) {
+        bridgeGame.increaseTryNumber();
         for (int i = 0; i < bridgeGame.getBridgeLength(); i++) {
-            moved = retry(() -> bridgeGame.move(inputView.readMoving()));
+            boolean moved = retry(() -> bridgeGame.move(inputView.readMoving()));
             outputView.printMap(bridgeGame, moved);
             if (!moved) {
                 return false;
