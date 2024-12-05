@@ -21,7 +21,7 @@ public class GameController {
             bridgeGame.increaseTryNumber();
             boolean moved = false;
             if (crossAllTheBridges(bridgeGame, moved)) { // 다리건너기 성공하면 출력하고 그만!
-                outputView.printResult(bridgeGame, moved);
+                outputView.printResult(bridgeGame, true);
                 break;
             }
             String gameCommand = inputView.readGameCommand(); // 다시 시도할지 입력받기
