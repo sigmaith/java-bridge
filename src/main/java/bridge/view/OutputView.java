@@ -16,33 +16,31 @@ public class OutputView {
      */
     public void printMap(BridgeGame bridgeGame, boolean moved) {
         List<String> ul = new ArrayList<>(), dl = new ArrayList<>();
-
-        if (moved) { // 방금거가 true면 걍 붙이면 되는데
-            for (int idx = 0; idx < bridgeGame.getPlayerIndex(); idx++) {
-                if (bridgeGame.getBridgePartBy(idx).equals("U")) { // U일때
-                    ul.add(" O "); // upline에 " O " 추가
-                    dl.add("   "); // downline에 "   " 추가
-                }
-                if (bridgeGame.getBridgePartBy(idx).equals("D")) { // D일때
-                    ul.add("   "); // upline에 "   " 추가
-                    dl.add(" O ");// downline에 " O " 추가
-                }
-            }
-
-            if (bridgeGame.getBridgePartBy(bridgeGame.getPlayerIndex()).equals("U")) {
-                ul.add(" O "); // upline에 " O " 추가
-                dl.add("   "); // downline에 "   " 추가
-            }
-            if (bridgeGame.getBridgePartBy(bridgeGame.getPlayerIndex()).equals("D")) {
-                ul.add("   "); // upline에 "   " 추가
-                dl.add(" O ");// downline에 " O " 추가
-            }
-            System.out.println("[" + String.join("|", ul) + "]" + "\n" + "[" + String.join("|", dl) + "]\n");
+        if (printWhenSucceded(bridgeGame, moved, ul, dl)) {
             return;
         }
-        // 방금거가 true가 아니면 X로 붙여야함.
+        printWhenFailed(bridgeGame, ul, dl);
+    }
 
-        for (int idx = 0; idx <= bridgeGame.getPlayerIndex(); idx++) {
+    private static void printWhenFailed(BridgeGame bridgeGame, List<String> ul, List<String> dl) {
+        printUntilPlayerIndex(bridgeGame, ul, dl);
+        printLastFailedPoint(bridgeGame, ul, dl);
+        System.out.println("[" + String.join("|", ul) + "]" + "\n" + "[" + String.join("|", dl) + "]\n");
+    }
+
+    private static void printLastFailedPoint(BridgeGame bridgeGame, List<String> ul, List<String> dl) {
+        if (bridgeGame.getBridgePartBy(bridgeGame.getPlayerIndex() + 1).equals("U")) {
+            ul.add("   ");
+            dl.add(" X ");
+        }
+        if (bridgeGame.getBridgePartBy(bridgeGame.getPlayerIndex() + 1).equals("D")) {
+            ul.add(" X ");
+            dl.add("   ");
+        }
+    }
+
+    private static void printUntilPlayerIndex(BridgeGame bridgeGame, List<String> ul, List<String> dl) {
+        for (int idx = 0; idx <= bridgeGame.getPlayerIndex(); idx++) { // 방금거가 true가 아니면 X로 붙여야함.
             if (bridgeGame.getBridgePartBy(idx).equals("U")) { // U일때
                 ul.add(" O "); // upline에 " O " 추가
                 dl.add("   "); // downline에 "   " 추가
@@ -52,16 +50,40 @@ public class OutputView {
                 dl.add(" O ");// downline에 " O " 추가
             }
         }
+    }
 
-        if (bridgeGame.getBridgePartBy(bridgeGame.getPlayerIndex() + 1).equals("U")) {
-            ul.add("   ");
-            dl.add(" X ");
+    private static boolean printWhenSucceded(BridgeGame bridgeGame, boolean moved, List<String> ul, List<String> dl) {
+        if (moved) { // 방금거가 true면 걍 붙이면 되는데
+            printBeforePlayerIndex(bridgeGame, ul, dl);
+            printLastSuccess(bridgeGame, ul, dl);
+            System.out.println("[" + String.join("|", ul) + "]" + "\n" + "[" + String.join("|", dl) + "]\n");
+            return true;
         }
-        if (bridgeGame.getBridgePartBy(bridgeGame.getPlayerIndex() + 1).equals("D")) {
-            ul.add(" X ");
-            dl.add("   ");
+        return false;
+    }
+
+    private static void printLastSuccess(BridgeGame bridgeGame, List<String> ul, List<String> dl) {
+        if (bridgeGame.getBridgePartBy(bridgeGame.getPlayerIndex()).equals("U")) {
+            ul.add(" O "); // upline에 " O " 추가
+            dl.add("   "); // downline에 "   " 추가
         }
-        System.out.println("[" + String.join("|", ul) + "]" + "\n" + "[" + String.join("|", dl) + "]\n");
+        if (bridgeGame.getBridgePartBy(bridgeGame.getPlayerIndex()).equals("D")) {
+            ul.add("   "); // upline에 "   " 추가
+            dl.add(" O ");// downline에 " O " 추가
+        }
+    }
+
+    private static void printBeforePlayerIndex(BridgeGame bridgeGame, List<String> ul, List<String> dl) {
+        for (int idx = 0; idx < bridgeGame.getPlayerIndex(); idx++) {
+            if (bridgeGame.getBridgePartBy(idx).equals("U")) { // U일때
+                ul.add(" O "); // upline에 " O " 추가
+                dl.add("   "); // downline에 "   " 추가
+            }
+            if (bridgeGame.getBridgePartBy(idx).equals("D")) { // D일때
+                ul.add("   "); // upline에 "   " 추가
+                dl.add(" O ");// downline에 " O " 추가
+            }
+        }
     }
 
     /**
@@ -73,15 +95,12 @@ public class OutputView {
         System.out.println("최종 게임 결과");
         printMap(bridgeGame, moved);
         System.out.println();
-
         if (bridgeGame.success()) {
             System.out.println("게임 성공 여부: 성공");
         }
-
         if (!bridgeGame.success()) {
             System.out.println("게임 성공 여부: 실패");
         }
-
         System.out.println("총 시도한 횟수: " + bridgeGame.getTryNumber());
     }
 }
