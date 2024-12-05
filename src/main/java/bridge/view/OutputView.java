@@ -16,10 +16,11 @@ public class OutputView {
      */
     public void printMap(BridgeGame bridgeGame, boolean moved) {
         List<String> ul = new ArrayList<>(), dl = new ArrayList<>();
-        if (printWhenSucceded(bridgeGame, moved, ul, dl)) {
+        if (!moved) {
+            printWhenFailed(bridgeGame, ul, dl);
             return;
         }
-        printWhenFailed(bridgeGame, ul, dl);
+        printWhenSucceded(bridgeGame, ul, dl);
     }
 
     private static void printWhenFailed(BridgeGame bridgeGame, List<String> ul, List<String> dl) {
@@ -52,14 +53,12 @@ public class OutputView {
         }
     }
 
-    private static boolean printWhenSucceded(BridgeGame bridgeGame, boolean moved, List<String> ul, List<String> dl) {
-        if (moved) { // 방금거가 true면 걍 붙이면 되는데
-            printBeforePlayerIndex(bridgeGame, ul, dl);
-            printLastSuccess(bridgeGame, ul, dl);
-            System.out.println("[" + String.join("|", ul) + "]" + "\n" + "[" + String.join("|", dl) + "]\n");
-            return true;
-        }
-        return false;
+    private static boolean printWhenSucceded(BridgeGame bridgeGame, List<String> ul, List<String> dl) {
+        // 방금거가 true면 걍 붙이면 되는데
+        printBeforePlayerIndex(bridgeGame, ul, dl);
+        printLastSuccess(bridgeGame, ul, dl);
+        System.out.println("[" + String.join("|", ul) + "]" + "\n" + "[" + String.join("|", dl) + "]\n");
+        return true;
     }
 
     private static void printLastSuccess(BridgeGame bridgeGame, List<String> ul, List<String> dl) {
