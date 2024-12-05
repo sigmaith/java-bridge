@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 public class BridgeGame {
     private final List<String> bridge;
     private int tryNumber = 0;
-    private int playerIndex = 0;
+    private int playerIndex = -1;
 
     public static BridgeGame from(String input) {
         validate(input); // 숫자인지, 3~20 인지 검증
@@ -21,6 +21,22 @@ public class BridgeGame {
 
     public int getBridgeLength() {
         return bridge.size();
+    }
+
+    public void increaseTryNumber() {
+        tryNumber++;
+    }
+
+    public int getTryNumber() {
+        return tryNumber;
+    }
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public String getBridgePartBy(int index) {
+        return bridge.get(index);
     }
 
     private BridgeGame(final int input) {
@@ -46,7 +62,7 @@ public class BridgeGame {
      */
     public boolean move(String input) {
         validateUorD(input);
-        if (bridge.get(playerIndex).equals(input)) {
+        if (bridge.get(playerIndex + 1).equals(input)) {
             playerIndex++;
             return true;
         }

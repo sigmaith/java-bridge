@@ -18,19 +18,22 @@ public class GameController {
         inputView.announceStartOfGame();
         BridgeGame bridgeGame = retry(() -> BridgeGame.from(inputView.readBridgeSize()));
         while (true) {
+            bridgeGame.increaseTryNumber();
             if (crossAllTheBridges(bridgeGame)) {
                 break;
             }
+
             // 다시 시도할지 입력받기
         }
     }
 
     private boolean crossAllTheBridges(BridgeGame bridgeGame) {
         for (int i = 0; i < bridgeGame.getBridgeLength(); i++) {
-            if (!bridgeGame.move(inputView.readMoving())) {
+            Boolean moved = retry(() -> bridgeGame.move(inputView.readMoving()));
+            outputView.printMap(bridgeGame, moved);
+            if (!moved) {
                 return false;
             }
-            //
         }
         return true;
     }
