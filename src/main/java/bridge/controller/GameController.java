@@ -19,8 +19,9 @@ public class GameController {
         BridgeGame bridgeGame = retry(() -> BridgeGame.from(inputView.readBridgeSize()));
         while (true) {
             bridgeGame.increaseTryNumber();
-            if (crossAllTheBridges(bridgeGame)) {
-                // 다리건너기 성공하면 출력하고 그만!
+            boolean moved = false;
+            if (crossAllTheBridges(bridgeGame, moved)) { // 다리건너기 성공하면 출력하고 그만!
+                outputView.printResult(bridgeGame, moved);
                 break;
             }
             String gameCommand = inputView.readGameCommand(); // 다시 시도할지 입력받기
@@ -29,15 +30,15 @@ public class GameController {
                 continue;
             }
             if (gameCommand.equals("Q")) {
-                // 출력하고
+                outputView.printResult(bridgeGame, moved); // 출력하고 그만
                 break;
             }
         }
     }
 
-    private boolean crossAllTheBridges(BridgeGame bridgeGame) {
+    private boolean crossAllTheBridges(BridgeGame bridgeGame, boolean moved) {
         for (int i = 0; i < bridgeGame.getBridgeLength(); i++) {
-            Boolean moved = retry(() -> bridgeGame.move(inputView.readMoving()));
+            moved = retry(() -> bridgeGame.move(inputView.readMoving()));
             outputView.printMap(bridgeGame, moved);
             if (!moved) {
                 return false;

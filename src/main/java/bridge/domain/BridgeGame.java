@@ -44,6 +44,10 @@ public class BridgeGame {
         crossing = true;
     }
 
+    public boolean success() {
+        return crossing;
+    }
+
     private BridgeGame(final int input) {
         BridgeMaker bridgeMaker = new BridgeMaker(new BridgeRandomNumberGenerator());
         this.bridge = bridgeMaker.makeBridge(input);
