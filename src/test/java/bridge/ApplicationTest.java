@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.util.Lists.newArrayList;
 
 import bridge.domain.BridgeGame;
+import bridge.domain.BridgeMaker;
 import bridge.domain.BridgeNumberGenerator;
 import camp.nextstep.edu.missionutils.test.NsTest;
 import java.util.List;
@@ -18,7 +19,7 @@ class ApplicationTest extends NsTest {
     @Test
     void 다리_생성_테스트() {
         BridgeNumberGenerator numberGenerator = new TestNumberGenerator(newArrayList(1, 0, 0));
-        BridgeGame.BridgeMaker bridgeMaker = new BridgeGame.BridgeMaker(numberGenerator);
+        BridgeMaker bridgeMaker = new BridgeMaker(numberGenerator);
         List<String> bridge = bridgeMaker.makeBridge(3);
         assertThat(bridge).containsExactly("U", "D", "D");
     }

@@ -17,6 +17,22 @@ public class GameController {
     public void run() {
         inputView.announceStartOfGame();
         BridgeGame bridgeGame = retry(() -> BridgeGame.from(inputView.readBridgeSize()));
+        while (true) {
+            if (crossAllTheBridges(bridgeGame)) {
+                break;
+            }
+            // 다시 시도할지 입력받기
+        }
+    }
+
+    private boolean crossAllTheBridges(BridgeGame bridgeGame) {
+        for (int i = 0; i < bridgeGame.getBridgeLength(); i++) {
+            if (!bridgeGame.move(inputView.readMoving())) {
+                return false;
+            }
+            //
+        }
+        return true;
     }
 
     private static <T> T retry(Supplier<T> supplier) {

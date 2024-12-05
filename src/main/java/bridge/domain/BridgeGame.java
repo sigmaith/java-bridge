@@ -11,10 +11,16 @@ import java.util.stream.IntStream;
  */
 public class BridgeGame {
     private final List<String> bridge;
+    private int tryNumber = 0;
+    private int playerIndex = 0;
 
     public static BridgeGame from(String input) {
         validate(input); // 숫자인지, 3~20 인지 검증
         return new BridgeGame(Integer.parseInt(input));
+    }
+
+    public int getBridgeLength() {
+        return bridge.size();
     }
 
     private BridgeGame(final int input) {
@@ -38,7 +44,19 @@ public class BridgeGame {
      * <p>
      * 이동을 위해 필요한 메서드의 반환 타입(return type), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
-    public void move() {
+    public boolean move(String input) {
+        validateUorD(input);
+        if (bridge.get(playerIndex).equals(input)) {
+            playerIndex++;
+            return true;
+        }
+        return false;
+    }
+
+    private void validateUorD(String moving) {
+        if (!moving.equals("U") && !moving.equals("D")) {
+            throw CustomException.from(ErrorMessage.CELL_TO_MOVE_FORMAT_BRIDGE_LENGTH_EXCEPTION);
+        }
     }
 
     /**
