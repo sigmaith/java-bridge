@@ -48,6 +48,10 @@ public class BridgeGame {
         return crossing;
     }
 
+    public void reset() {
+        playerIndex = -1;
+    }
+
     private BridgeGame(final int input) {
         BridgeMaker bridgeMaker = new BridgeMaker(new BridgeRandomNumberGenerator());
         this.bridge = bridgeMaker.makeBridge(input);

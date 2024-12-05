@@ -26,7 +26,7 @@ public class GameController {
             }
             String gameCommand = inputView.readGameCommand(); // 다시 시도할지 입력받기
             if (gameCommand.equals("R")) {
-                // bridgeGame reset
+                 bridgeGame.reset(); // 게임 리셋 (플레이어 다시 -1로 제자리)
                 continue;
             }
             if (gameCommand.equals("Q")) {
