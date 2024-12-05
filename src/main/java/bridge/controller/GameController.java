@@ -20,10 +20,18 @@ public class GameController {
         while (true) {
             bridgeGame.increaseTryNumber();
             if (crossAllTheBridges(bridgeGame)) {
+                // 다리건너기 성공하면 출력하고 그만!
                 break;
             }
-
-            // 다시 시도할지 입력받기
+            String gameCommand = inputView.readGameCommand(); // 다시 시도할지 입력받기
+            if (gameCommand.equals("R")) {
+                // bridgeGame reset
+                continue;
+            }
+            if (gameCommand.equals("Q")) {
+                // 출력하고
+                break;
+            }
         }
     }
 
