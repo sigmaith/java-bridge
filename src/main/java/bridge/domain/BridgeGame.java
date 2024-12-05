@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
  */
 public class BridgeGame {
     private final List<String> bridge;
+    private boolean crossing = false;
     private int tryNumber = 0;
     private int playerIndex = -1;
 
@@ -37,6 +38,10 @@ public class BridgeGame {
 
     public String getBridgePartBy(int index) {
         return bridge.get(index);
+    }
+
+    public void recordSuccessCrossing() {
+        crossing = true;
     }
 
     private BridgeGame(final int input) {
